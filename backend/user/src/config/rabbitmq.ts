@@ -1,7 +1,7 @@
 import amqp from 'amqplib'
 
 let channel :amqp.Channel;
- export const connectRabbitMQ = async()=>{
+const connectRabbitMQ = async()=>{
     try {
 const connection = await amqp.connect({
   protocol: "amqp",
@@ -27,3 +27,5 @@ await channel.assertQueue(queueName ,{durable:true})
 channel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)),{persistent :true})
 
 }
+
+export default connectRabbitMQ;
