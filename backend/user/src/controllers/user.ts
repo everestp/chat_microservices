@@ -4,6 +4,8 @@ import { TryCatch } from "../config/TryCatch.js";
 import { redisClient } from "../index.js";
 import { User } from "../models/User.js";
 import { generateToken } from "../config/generateToke.js";
+import { AuthenticateRequest } from "../middleware/isAuth.js";
+import { NextFunction } from "express";
 
 export const loginUser = TryCatch(async (req, res) => {
   const email = req.body.email?.toLowerCase().trim();
@@ -79,4 +81,48 @@ res.json({
   token
 })
 
+})
+
+export const myProfile = TryCatch(async (req: AuthenticateRequest, res) => {
+  if (!req.user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Only send safe fields
+  const { _id, name, email } = req.user;
+  res.json({ _id, name, email });
+});
+
+
+export const updateName = TryCatch(async(req:AuthenticateRequest ,res)=>{
+   const  user = await User.findById(req.user?_id);
+   if(!user){
+    res.status(404).json({
+       messasge :"Please Login"
+    })
+    return
+   }
+   user.name = req.body.name;
+   await user.save()
+   const token = generateToken(user);
+   res.json({
+     message :"User Updated",
+     user,
+     token,
+   })
+})
+
+
+export const getAllUser  = TryCatch(async(req:AuthenticateRequest ,res)=>{
+   const  users = await User.find();
+   res.json(users)
+})
+
+
+export const getAUser  = TryCatch(async(req:AuthenticateRequest ,res)=>{
+   const user = await User.findById(req.params.id);
+   if (!user) {
+     return res.status(404).json({ message: "User not found" });
+   }
+   res.json(user);
 })

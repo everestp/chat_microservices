@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { decode, JwtPayload } from "jsonwebtoken";
 import { IUser, User } from "../models/User.js";
 
 
@@ -32,23 +32,23 @@ export const IsAuth = async (
       process.env.JWT_SECRET as string
     ) as JwtPayload;
 
-    //  Find user
-    const user = await User.findById(decoded.id);
-
-    if (!user) {
-      res.status(401).json({
-        message: "User not found",
+if (!decoded || !decoded.user){
+ res.status(401).json({
+        message: "Invalid token",
       });
       return;
-    }
+}
 
+
+
+   
     //  Attach user to request
-    req.user = user;
+    req.user = decoded.user;
 
     next();
   } catch (error) {
     res.status(401).json({
-      message: "Invalid token",
+      message: "Please login",
     });
   }
 };
