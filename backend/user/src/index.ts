@@ -8,7 +8,7 @@ import connectRabbitMQ from "./config/rabbitmq.js";
 configDotenv();
 
 connectDB();
- await connectRabbitMQ();
+  connectRabbitMQ();
 
 export const redisClient = createClient({
   url: process.env.REDIS_URL,

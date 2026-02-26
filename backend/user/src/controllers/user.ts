@@ -95,7 +95,7 @@ export const myProfile = TryCatch(async (req: AuthenticateRequest, res) => {
 
 
 export const updateName = TryCatch(async(req:AuthenticateRequest ,res)=>{
-   const  user = await User.findById(req.user?_id);
+   const  user = await User.findById(req.user?._id);
    if(!user){
     res.status(404).json({
        messasge :"Please Login"

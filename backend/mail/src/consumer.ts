@@ -18,13 +18,16 @@ const startSendOtpConsumer = async () => {
     console.log("✅Mail service consumer started, listening for OTP emails");
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.USER,
-        pass: process.env.PASSWORD,
-      },
-    });
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 587,
+  service: process.env.SMTP_SERVICE,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
+  
     channel.consume(queueName, async (msg) => {
       if (!msg) return;
 
