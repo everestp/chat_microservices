@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AppProvider } from "@/context/AppContext";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -16,7 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <AppProvider>
+
         {children}
+        <Toaster/>
+        </AppProvider>
       </body>
     </html>
   );

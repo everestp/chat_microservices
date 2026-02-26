@@ -7,7 +7,7 @@ export interface AuthenticateRequest extends Request {
   user?: IUser | null;
 }
 
-export const IsAuth = async (
+export const isAuth = async (
   req: AuthenticateRequest,
   res: Response,
   next: NextFunction
